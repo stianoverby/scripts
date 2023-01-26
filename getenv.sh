@@ -66,14 +66,9 @@ azure_app_jwk=$(kubectl exec $pod_name -- env | grep ^AZURE_APP_JWK= )
 # Get the value of the AZURE_APP_CLIENT_SECRET environment variable
 azure_app_client_secret=$(kubectl exec $pod_name -- env | grep AZURE_APP_CLIENT_SECRET)
 
-# Get the values of all the environment variables that is an AAD_CLIENT
-aad_clients=$(kubectl exec $pod_name -- env | grep AAD_CLIENT)
-
 # Print env vars to stdout
 printf "\n=== START ENV VARS ===\n\n"
 echo "$azure_app_jwk"
 printf "\n"
 echo "$azure_app_client_secret"
-printf "\n"
-echo "$aad_clients"
 printf "\n=== END ENV VARS ===\n"
