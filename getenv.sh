@@ -1,10 +1,11 @@
 #!/bin/bash
-#
+#########################################################
+#       RETRIEVE VALUES OF ENVIRONMENT VARIABLES        #
+#########################################################
 # Author: Stian Øverby
 #
 # This script is used to retrive environment variables from the pods of a wanted 
 # context in a kubernetes cluster. 
-# 
 #
 # Prelimenaries:
 #   Save the file with a prefered filename. You of course will need a shell like bash.
@@ -57,9 +58,6 @@ read -p "Enter the name of the application => " application
 # Get the name of the first pod with the specified application
 pod_name=$(kubectl get pods --field-selector=status.phase=Running -l app=$application -o jsonpath='{.items[0].metadata.name}')
 
-#########################################################
-#          GET VALUES OF ENVIRONMENT VARIABLES          #
-#########################################################
 # Get the value of the AZURE_APP_JWK environment variable
 azure_app_jwk=$(kubectl exec $pod_name -- env | grep ^AZURE_APP_JWK= )
 
