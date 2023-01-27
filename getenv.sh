@@ -38,7 +38,7 @@ fi
 kubectl config use-context $context
 
 # Check if context is gcp, and that the user is not already logged in. If 
-# gcp-contex and not legged in, redirect to authentication.
+# gcp-contex and not logged in, redirect to authentication.
 active_account=$(gcloud config list --format 'value(core.account)')
 if [[ $context == *"gcp"* ]] && [[ ! -n $active_account ]]; then
     echo "Redirecting to log-in since environment requires authentication..."
