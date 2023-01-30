@@ -1,3 +1,10 @@
+'''
+    DIVIDE PARTICIPANTS INTO ALLOWED/NOT ALLOWED AGE GROUPS
+        Script developed to help an voluntary organization to filter what participants 
+        are allowed to take part of an event. Allowed participants are those who are of
+        the allowed age during the entire event.
+'''
+
 from datetime import datetime
 import csv
 
