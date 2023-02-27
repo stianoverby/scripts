@@ -31,12 +31,11 @@ class Lazyiterator {
                 (value, operation) => operation(value),
                 currentValue
             );
-            
             /* 
-            We might both get undefined, and that the thing we tried
-            to implement the function on is not a number
+            We might both get undefined, and NaN. The best way of checking for 
+            NaN is checking for self equality.
              */
-            if (mappedValue !== undefined && !isNaN(mappedValue)) {
+            if (mappedValue !== undefined && mappedValue === mappedValue) {
                 return { value: mappedValue, done: false };
             }
         }
