@@ -32,8 +32,8 @@ class Lazyiterator {
                 currentValue
             );
             /* 
-            We might both get undefined, and NaN. The best way of checking for 
-            NaN is checking for self equality.
+                We might both get undefined and NaN. The best way of checking for 
+                NaN is checking for self equality.
              */
             if (mappedValue !== undefined && mappedValue === mappedValue) {
                 return { value: mappedValue, done: false };
