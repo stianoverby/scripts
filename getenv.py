@@ -10,7 +10,8 @@ Preliminaries:
     1. Save the file with a preferred filename.
     2. Make sure you have a shell like bash.
     3. Run 'chmod u+x filename' in your shell to give the user execution privileges.
-    4. Installing python3 is a prerequisite
+    4. Install python3
+    4. Log into nais device
 
 Usage:
     1. Open a terminal and navigate to the directory where the script is located.
@@ -48,13 +49,10 @@ chosen_ctx = ctx_choices[choice]
 # Change to the specified context
 subprocess.run(["kubectl", "config", "use-context", chosen_ctx], stderr=devnull)
 
-# Check if context is gcp, and that the user is not already logged in. If gcp-context and not logged in, redirect to authentication.
-active_account = subprocess.check_output(["gcloud", "config", "list", "--format", "value(core.account)"], universal_newlines=True).strip()
-if "gcp" in chosen_ctx and not active_account:
+# Check if context is gcp, If gcp-context, redirect to authentication.
+if "gcp" in chosen_ctx:
     print("Redirecting to log-in since environment requires authentication...")
     subprocess.run(["gcloud", "auth", "login"])
-else:
-    print(f"Already logged in as: {active_account}")
 
 # Print application names to stdout
 applications = subprocess.check_output(["kubectl", "get", "application"], universal_newlines=True, stderr=devnull)
@@ -104,11 +102,11 @@ env_variables =     [   "AZURE_APP_CLIENT"
 
 # Fetch the values of the env variables
 values = []
+print("Fetching...")
+call_value = subprocess.check_output(["kubectl", "exec", pod_name, "--", "env"], universal_newlines=True, stderr=devnull)
+call_value = call_value.strip().split("\n")
 for env_variable in env_variables:
-    print("Fetching...")
-    value = subprocess.check_output(["kubectl", "exec", pod_name, "--", "env"], universal_newlines=True, stderr=devnull)
-    value = value.strip().split("\n")
-    value = [line for line in value if env_variable in line]
+    value = [line for line in call_value if env_variable in line]
     if value:
         values.append(value[0])
 
