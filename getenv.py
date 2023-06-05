@@ -106,7 +106,7 @@ print("Fetching...")
 call_value = subprocess.check_output(["kubectl", "exec", pod_name, "--", "env"], universal_newlines=True, stderr=devnull)
 call_value = call_value.strip().split("\n")
 for env_variable in env_variables:
-    value = [line for line in call_value if env_variable in line]
+    value = [line for line in call_value if line.split("=")[0] == env_variable]
     if value:
         values.append(value[0])
 
