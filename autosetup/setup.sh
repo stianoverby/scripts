@@ -34,92 +34,105 @@ confirm() {
 }
 
 # Install Xcode command-line tools
-echo "Checking Xcode command-line tools..."
+echo "[INFO] Checking Xcode command-line tools..."
 if ! command -v git &>/dev/null; then
-    echo "Xcode command-line tools not found."
-    echo "Installing Xcode comman-line tools..."
+    echo "[INFO] Xcode command-line tools not found."
+    echo "[INFO] Installing Xcode comman-line tools..."
     xcode-select --install 2>/dev/null
-    echo "Xcode command-line tools installed."
+    echo "[INFO] Xcode command-line tools installed."
 else
-    echo "Xcode command-line tools are already installed."
+    echo "[INFO] Xcode command-line tools are already installed."
 fi
-echo ""
 
 # Install Homebrew
-echo "Checking Homebrew..."
+echo "[INFO] Checking Homebrew..."
 if ! command -v brew &>/dev/null; then
-    echo "Homebrew not found"
-    echo "Installing Homebrew..."
+    echo "[INFO] Homebrew not found"
+    echo "[INFO] Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 else
-    echo "Homebrew is already installed."
+    echo "[INFO] Homebrew is already installed."
 fi
-echo ""
+echo "[INFO] Updating Homebrew..."
+brew update
 
 # Install Python 3
-echo "Checking Python 3..."
+echo "[INFO] Checking Python 3..."
 if ! command -v python3 &>/dev/null; then
-    echo "Python 3 not found."
-    echo "Installing Python 3..."
+    echo "[INFO] Python 3 not found."
+    echo "[INFO] Installing Python 3..."
     brew install python
-    echo "Python 3 installed."
+    echo "[INFO] Python 3 installed."
 else
-    echo "Python 3 is already installed."
+    echo "[INFO] Python 3 is already installed."
+fi
+
+# Install Java 11
+echo "[INFO] Checking Java..."
+if ! command -v java &>/dev/null; then
+    echo "[INFO] Java not found."
+    if confirm "Do you want to install Java 11?"; then
+        echo "[INFO] Installing Java 11..."
+        brew install java11
+        echo "[INFO] Java 11 installed."
+        echo "[INFO] Initializing symbol link."
+        sudo ln -sfn /usr/local/opt/openjdk@11/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-11.jdk
+        echo "[INFO] Symbol link initialized."
+
+    else
+        echo "[INFO] Skipping Java 11 installation."
+    fi
+else
+    echo "[INFO] Java 11 is already installed."
 fi
 
 # Install Git
-echo "Checking Git..."
+echo "[INFO] Checking Git..."
 xcode-select --install 2>/dev/null
 if ! command -v git &>/dev/null; then
-    echo "Git not found."
-    echo "Installing Git..."
+    echo "[INFO] Git not found."
+    echo "[INFO] Installing Git..."
     brew install git
 else
-    echo "Git is already installed."
+    echo "[INFO] Git is already installed."
 fi
-echo ""
 
 # Fetch git repos
 if confirm "Do you want to clone all repos belonging to the ISA-team?"; then
-    echo "Cloning all repos..."
+    echo "[INFO] Cloning all repos..."
     python3 clone.py
-    echo "All repos cloned."
+    echo "[INFO] All repos cloned."
 else
-    echo "Skipping cloning of repos"
+    echo "[INFO] Skipping cloning of repos"
 fi
-echo ""
 
 # Install NAIS
 # TODO: Check Naisdevice
-echo "Not able to check if Naisdevice already exist..."
+echo "[WARN] Not able to check if Naisdevice already exist..."
 if confirm "Do you want to install Naisdevice?"; then
-    echo "Installing Naisdevice..."
+    echo "[INFO] Installing Naisdevice..."
     brew tap nais/tap
     brew install Naisdevice
-    echo "Naisdevice installed."
+    echo "[INFO] Naisdevice installed."
 else
-    echo "Skipping Naisdevice installation."
+    echo "[INFO] Skipping Naisdevice installation."
 fi
-echo ""
 
 # Install Kubernetes
-echo "Checking Kubernetes..."
+echo "[INFO] Checking Kubernetes..."
 if ! command -v kubectl &>/dev/null; then
-    echo "Kubernetes not found."
+    echo "[INFO] Kubernetes not found."
     if confirm "Do you want to install Kubernetes?"; then
-        echo "Installing Kubernetes..."
+        echo "[INFO] Installing Kubernetes..."
         brew install kubectl
-        echo "Kubernetes installed."
+        echo "[INFO] Kubernetes installed."
     else
-        echo "Skipping Kubernetes installation."
-        echo ""
-        exit 0
+        echo "[INFO] Skipping Kubernetes installation."
     fi
 else
-    echo "Kubernetes is already installed."
+    echo "[INFO] Kubernetes is already installed."
 fi
-echo ""
 
 # Add .bashrc file 
-echo "Checking .bashrc..."
-source setup_bashrc.sh
+echo "[INFO] Checking .bashrc..."
+./setup_bashrc.sh

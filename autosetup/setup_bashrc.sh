@@ -26,11 +26,11 @@ alias grep="grep --color=auto"
 
 # Check if .bashrc already exists
 if [[ -e ~/.bashrc ]]; then
-    echo ".bashrc file already exists."
+    echo "[INFO] .bashrc file already exists."
     exit 1
 fi
 
-echo "Creating .bashrc file..."
+echo "[INFO] Creating .bashrc file..."
 
 # Check if kubeconfig file exists in the current directory
 if [[ -e kubeconfigs/config ]]; then
@@ -39,16 +39,16 @@ if [[ -e kubeconfigs/config ]]; then
 # Set KUBE_CONFIG environment variable
 export KUBE_CONFIG=\"$kubeconfig_path\"
 "
-    echo "KUBE_CONFIG environment variable set to: $kubeconfig_path"
+    echo "[INFO] KUBE_CONFIG environment variable set to: $kubeconfig_path"
 else 
-    echo "kubeconfig file not found in the current directory."
+    echo "[INFO] kubeconfig file not found in the current directory."
 fi
 
 # Push content to .bashrc file
 echo "$BASHRC_CONTENT" > ~/.bashrc
-echo ".bashrc file created."
+echo "[INFO] .bashrc file created."
 
 # Source the .bashrc file to apply changes
 source ~/.bashrc
 
-echo "Script completed."
+echo "[INFO] Script completed."
