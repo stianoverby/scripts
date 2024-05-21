@@ -12,9 +12,9 @@
 #   - Please ensure that you have the necessary permissions to create and modify files in the relevant directories.
 #
 # Usage: 
-#   ./setup.sh
+#   sudo ./setup.sh
 #   - Follow the prompts to confirm or skip each installation step.
-#   -After the script finishes, check the installed software and perform any additional configuration if required.
+#   - After the script finishes, check the installed software and perform any additional configuration if required.
 
 
 # Get confirmation from user that the installation is wanted
@@ -34,67 +34,55 @@ confirm() {
 }
 
 # Install Xcode command-line tools
-echo "[INFO] Checking Xcode command-line tools..."
-if ! command -v git &>/dev/null; then
-    echo "[INFO] Xcode command-line tools not found."
+if confirm "Do you want to install Xcode command-line tools?"; then
     echo "[INFO] Installing Xcode comman-line tools..."
     xcode-select --install 2>/dev/null
     echo "[INFO] Xcode command-line tools installed."
 else
-    echo "[INFO] Xcode command-line tools are already installed."
+    echo "[INFO] NOT installing Xcode command-line tools."
 fi
 
 # Install Homebrew
-echo "[INFO] Checking Homebrew..."
-if ! command -v brew &>/dev/null; then
-    echo "[INFO] Homebrew not found"
+if confirm "Do you want to install Homebrew?"; then
     echo "[INFO] Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo "[INFO] Homebrew installed"
+    echo "[INFO] Updating Homebrew..."
+    brew update
+    echo "[INFO] Updated Homebrew."
 else
-    echo "[INFO] Homebrew is already installed."
+    echo "[INFO] NOT installing Homebrew."
 fi
-echo "[INFO] Updating Homebrew..."
-brew update
 
 # Install Python 3
-echo "[INFO] Checking Python 3..."
-if ! command -v python3 &>/dev/null; then
-    echo "[INFO] Python 3 not found."
+if confirm "Do you want to install Python 3?"; then
     echo "[INFO] Installing Python 3..."
     brew install python
     echo "[INFO] Python 3 installed."
 else
-    echo "[INFO] Python 3 is already installed."
+    echo "[INFO] Skipping Python 3 installation."
 fi
 
 # Install Java 11
-echo "[INFO] Checking Java..."
-if ! command -v java &>/dev/null; then
-    echo "[INFO] Java not found."
-    if confirm "Do you want to install Java 11?"; then
-        echo "[INFO] Installing Java 11..."
-        brew install java11
-        echo "[INFO] Java 11 installed."
-        echo "[INFO] Initializing symbol link."
-        sudo ln -sfn /usr/local/opt/openjdk@11/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-11.jdk
-        echo "[INFO] Symbol link initialized."
+if confirm "Do you want to install Java 11?"; then
+    echo "[INFO] Installing Java 11..."
+    brew install java11
+    echo "[INFO] Java 11 installed."
+    echo "[INFO] Initializing symbol link."
+    sudo ln -sfn /usr/local/opt/openjdk@11/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-11.jdk
+    echo "[INFO] Symbol link initialized."
 
-    else
-        echo "[INFO] Skipping Java 11 installation."
-    fi
 else
-    echo "[INFO] Java 11 is already installed."
+    echo "[INFO] Skipping Java 11 installation."
 fi
 
 # Install Git
-echo "[INFO] Checking Git..."
-xcode-select --install 2>/dev/null
-if ! command -v git &>/dev/null; then
-    echo "[INFO] Git not found."
+if confirm "Do you want to install git?"; then
     echo "[INFO] Installing Git..."
     brew install git
+    echo "[INFO] Git installed..."
 else
-    echo "[INFO] Git is already installed."
+    echo "[INFO] Skipping git installation."
 fi
 
 # Fetch git repos
@@ -120,17 +108,12 @@ fi
 
 # Install Kubernetes
 echo "[INFO] Checking Kubernetes..."
-if ! command -v kubectl &>/dev/null; then
-    echo "[INFO] Kubernetes not found."
-    if confirm "Do you want to install Kubernetes?"; then
-        echo "[INFO] Installing Kubernetes..."
-        brew install kubectl
-        echo "[INFO] Kubernetes installed."
-    else
-        echo "[INFO] Skipping Kubernetes installation."
-    fi
+if confirm "Do you want to install Kubernetes?"; then
+    echo "[INFO] Installing Kubernetes..."
+    brew install kubectl
+    echo "[INFO] Kubernetes installed."
 else
-    echo "[INFO] Kubernetes is already installed."
+    echo "[INFO] Skipping Kubernetes installation."
 fi
 
 # Add .bashrc file 
