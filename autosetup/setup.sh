@@ -65,6 +65,8 @@ fi
 
 # Install Java 11
 if confirm "Do you want to install Java 11?"; then
+    USER=$(whoami)
+    sudo chown -R $USER /usr/local/share/zsh /usr/local/share/zsh/site-functions
     echo "[INFO] Installing Java 11..."
     brew install java11
     echo "[INFO] Java 11 installed."
@@ -96,7 +98,6 @@ fi
 
 # Install NAIS
 # TODO: Check Naisdevice
-echo "[WARN] Not able to check if Naisdevice already exist..."
 if confirm "Do you want to install Naisdevice?"; then
     echo "[INFO] Installing Naisdevice..."
     brew tap nais/tap
@@ -107,7 +108,6 @@ else
 fi
 
 # Install Kubernetes
-echo "[INFO] Checking Kubernetes..."
 if confirm "Do you want to install Kubernetes?"; then
     echo "[INFO] Installing Kubernetes..."
     brew install kubectl
